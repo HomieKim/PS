@@ -1,12 +1,12 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-#include <fstream>
 #include <stdio.h>
 #include <string.h>
 
 
 using namespace std;
+
 
 char bitmap[201][201];
 int length = 0;
@@ -131,13 +131,11 @@ int main() {
 	char type, inp_c;
 	int row = 0, col = 0;
 	while (true) {
-		length = 0;
-		memset(bitmap, 0, sizeof(bitmap));
 		cin >> type;
 		if (type == '#') break;
 		cin >> row >> col;
 		if (type == 'B') {
-			cout << "D   " << row << "   " << col << '\n';
+			printf("%c%4d%4d\n", 'D', row, col);
 			for (int i = 0; i < row; i++) {
 				for (int j = 0; j < col; j++) {
 					cin >> inp_c;
@@ -148,7 +146,7 @@ int main() {
 			cout << '\n';
 		}
 		else {
-			cout << "B   " << row << "   " << col << '\n';
+			printf("%c%4d%4d\n", 'B', row, col);
 			solveD(0, 0, row, col);
 			for (int i = 0; i < row; i++) {
 				for (int j = 0; j < col; j++) {
@@ -161,7 +159,8 @@ int main() {
 			}
 			if (length % 50 != 0) cout << '\n';
 		}
-	
+		length = 0;
+		memset(bitmap, 0, sizeof(bitmap));
 	}
 
 
