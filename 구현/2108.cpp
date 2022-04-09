@@ -1,80 +1,72 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
 #include <cmath>
-#include <vector>
-
 using namespace std;
-bool compare(pair<int, int>a, pair<int, int>b) {
-	if (a.first == b.first) {
-		return a.second < b.second;
-	}
-	else {
-		return a.first > b.first;
-	}
-}
+int arr[8002] = { 0, };
 int main() {
-	
 	int n;
 	cin >> n;
 
-	vector<int> arr;
-	int tmp;
+	vector<int> vec;
+	int num;
 	int sum = 0;
-	int max = -4001;
-	int min = 4001;
-	int count[8002] = { 0 ,};
+
 	for (int i = 0; i < n; i++) {
-		cin >> tmp;
-		sum += tmp;
-		if (max < tmp) {
-			max = tmp;
-		}
-		if (min > tmp) {
-			min = tmp;
-		}
-		if (tmp < 0) {
-			count[tmp * -1]++;
+		cin >> num;
+		sum += num;
+		vec.push_back(num);
+		if (num < 0) {
+			arr[num * -1]++;
 		}
 		else {
-			count[tmp + 4001]++;
+			arr[num + 4001]++;
 		}
-		
-		arr.push_back(tmp);
+
 	}
-	
-	// n개의 수의 합을 n으로 나눈 값
-	cout << round((double)sum / n) << '\n';
-	// 중앙값
-	sort(arr.begin(), arr.end());
-	cout << arr[(n / 2 + 1)-1] << '\n';
-	// 가장 많이 나타나는 값
-	vector<pair<int,int>> vec;
+
+	sort(vec.begin(), vec.end());
+	int maxEl = *max_element(arr, arr + 8002);
+	vector<int> tmpVec;
 	for (int i = 0; i < 8002; i++) {
-		if (count[i] != 0) {
-			int tmp;
-			if (i <= 4000) {
-				tmp = i * -1;
+		if (maxEl == arr[i]) {
+			tmpVec.push_back(i);
+		}
+	}
+
+	int rst = 0;
+	if (tmpVec.size() > 1) {
+		for (int i = 0; i < tmpVec.size(); i++) {
+			if (tmpVec[i] >= 4001) {
+				tmpVec[i] -= 4001;
 			}
 			else {
-				tmp = i - 4001;
+				tmpVec[i] *= -1;
 			}
-			vec.push_back(make_pair(count[i], tmp));
 		}
-	}
-	sort(vec.begin(), vec.end(), compare);
-	if (vec.size() == 1) {
-		cout << vec[0].second << '\n';
+		sort(tmpVec.begin(), tmpVec.end());
+		rst = tmpVec[1];
 	}
 	else {
-		if (vec[0].first == vec[1].first) {
-			cout << vec[1].second << '\n';
+		rst = tmpVec[0];
+		if (rst >= 4001) {
+			rst -= 4001;
 		}
 		else {
-			cout << vec[0].second << '\n';
+			rst *= -1;
 		}
 	}
-	
-	// 최대값 - 최소값
-	cout << max - min << '\n';
+	// 산술평균
+	double avg = round(sum / (double)n);
+	if (avg == -0) {
+		avg = 0;
+	}
+	cout << avg << '\n';
+	// 중앙값
+	cout << vec[(n / 2 + 1) - 1] << '\n';
+	// 최빈값
+	cout << rst << '\n';
+	// 범위
+	cout << vec[n - 1] - vec[0] << '\n';
 
 }
